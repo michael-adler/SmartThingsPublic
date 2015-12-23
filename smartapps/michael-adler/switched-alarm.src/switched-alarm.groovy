@@ -31,6 +31,7 @@ preferences {
     }
     section("Destination alarm") {
         input "dstAlarms", "capability.alarm", title: "Control these alarms", multiple: true, required: true
+        input "dstDelay", "number", title: "Delay destination alarm trigger (seconds)", multiple: false, required: false
         input "offAfter", "number", title: "Turn off after (seconds)", multiple: false, required: false
     }
 }
@@ -66,20 +67,22 @@ private alarm(evt) {
             switch_is_on = switch_is_on || (it.currentValue("switch") == "on")
         }
 
+        def d = (dstDelay ? dstDelay : 0)
+
         if (switch_is_on) {
-            log.debug "$evt.name: Triggering alarm $evt.value"
+            log.debug "$evt.name: Triggering alarm $evt.value after $d seconds"
             switch (evt.value) {
-                case "siren": dstAlarms?.siren(); break;
-                case "strobe": dstAlarms?.strobe(); break;
-                default: dstAlarms?.both()
+                case "siren": dstAlarms?.siren(delay: d * 1000); break;
+                case "strobe": dstAlarms?.strobe(delay: d * 1000); break;
+                default: dstAlarms?.both(delay: d * 1000)
             }
         }
 
         // Turn off after specified time, whether or not switches are enabled
         if (offAfter) {
             log.debug "$evt.name: Off after $offAfter seconds"
-            dstAlarms?.off(delay: offAfter * 1000)
-            srcAlarm.off(delay: offAfter * 1000)
+            dstAlarms?.off(delay: (d + offAfter) * 1000)
+            srcAlarm.off(delay: (d + offAfter) * 1000)
         }
     }
 }
