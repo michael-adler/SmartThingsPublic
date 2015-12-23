@@ -31,7 +31,7 @@ preferences {
     }
     section("Destination alarm") {
         input "dstAlarms", "capability.alarm", title: "Control these alarms", multiple: true, required: true
-        input "offAfter", "number", title: "Turn off after (seconds)", multilpe: false, required: false
+        input "offAfter", "number", title: "Turn off after (seconds)", multiple: false, required: false
     }
 }
 
@@ -53,8 +53,7 @@ private initialize() {
     subscribe srcAlarm, "alarm", alarm
 }
 
-private alarm(evt)
-{
+private alarm(evt) {
     log.debug "$evt.name: $evt.value"
 
     if (evt.value == "off") {
