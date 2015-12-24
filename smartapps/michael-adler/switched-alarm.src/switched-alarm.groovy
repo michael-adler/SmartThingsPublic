@@ -61,7 +61,9 @@ private alarm(evt) {
         dstAlarms?.off()
     }
     else {
-        def switch_is_on = false
+        // If no switches defined then enable the destination siren. If switches are defined
+        // then at least one must be on.
+        def switch_is_on = (srcSwitches == null)
         srcSwitches.findAll {
             log.debug "$evt.name: Switch ${it.displayName} is ${it.currentValue("switch")}"
             switch_is_on = switch_is_on || (it.currentValue("switch") == "on")
