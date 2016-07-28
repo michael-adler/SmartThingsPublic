@@ -16,7 +16,7 @@
  *
  */
 metadata {
-	definition (name: "RRG Aeon Smart Meter 6 - Beta", namespace: "gouldner", author: "gouldner") {
+	definition (name: "Aeon Smart Meter 6", namespace: "michael-adler", author: "gouldner") {
 		capability "Energy Meter"
 		capability "Actuator"
 		capability "Switch"
